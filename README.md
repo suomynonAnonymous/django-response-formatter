@@ -17,7 +17,7 @@ Every response — success or error — follows this structure:
 ## Installation
 
 ```bash
-pip install django-response-formatter
+pip install dj-response-formatter
 ```
 
 ## Quick Start
