@@ -23,7 +23,7 @@ Quick Start:
 See README.md for full documentation.
 """
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 from .exceptions import format_exception_handler
 from .renderers import FormattedJSONRenderer

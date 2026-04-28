@@ -4,13 +4,13 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dj-response-formatter"
-version = "0.1.1"
+version = "0.1.2"
 description = "Standardize all Django REST Framework API responses into a consistent, predictable format"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.9"
 authors = [
-    {name = "Pawan Acharya", email = "zqerpa@gmail.com"},
+    {name = "suomynonAnonymous", email = "zqerpa@gmail.com"},
 ]
 keywords = [
     "django",
