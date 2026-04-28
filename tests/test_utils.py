@@ -1,6 +1,6 @@
 """Tests for the utility functions."""
 
-from django_response_formatter.utils import (
+from dj_response_formatter.utils import (
     build_error_envelope,
     build_success_envelope,
     extract_pagination_metadata,

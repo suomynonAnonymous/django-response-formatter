@@ -4,7 +4,7 @@ from rest_framework import exceptions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from django_response_formatter.helpers import error_response, raw_response, success_response
+from dj_response_formatter.helpers import error_response, raw_response, success_response
 
 
 class SuccessView(APIView):

@@ -6,7 +6,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.auth",
     "rest_framework",
-    "django_response_formatter",
+    "dj_response_formatter",
 ]
 
 DATABASES = {
@@ -20,11 +20,11 @@ ROOT_URLCONF = "tests.urls"
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
-        "django_response_formatter.renderers.FormattedJSONRenderer",
+        "dj_response_formatter.renderers.FormattedJSONRenderer",
     ],
-    "EXCEPTION_HANDLER": "django_response_formatter.exceptions.format_exception_handler",
+    "EXCEPTION_HANDLER": "dj_response_formatter.exceptions.format_exception_handler",
 }
 
 MIDDLEWARE = [
-    "django_response_formatter.middleware.ResponseFormatterMiddleware",
+    "dj_response_formatter.middleware.ResponseFormatterMiddleware",
 ]

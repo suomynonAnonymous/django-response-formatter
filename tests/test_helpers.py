@@ -1,6 +1,6 @@
 """Tests for the helper functions."""
 
-from django_response_formatter.helpers import error_response, raw_response, success_response
+from dj_response_formatter.helpers import error_response, raw_response, success_response
 
 
 class TestSuccessResponse:

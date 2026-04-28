@@ -14,7 +14,7 @@ Usage:
 
         MIDDLEWARE = [
             # ... other middleware ...
-            "django_response_formatter.middleware.ResponseFormatterMiddleware",
+            "dj_response_formatter.middleware.ResponseFormatterMiddleware",
         ]
 
     Place it near the end of the middleware list so it can catch exceptions
@@ -28,7 +28,7 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 
 from .utils import build_error_envelope, get_config
 
-logger = logging.getLogger("django_response_formatter")
+logger = logging.getLogger("dj_response_formatter")
 
 
 class ResponseFormatterMiddleware:

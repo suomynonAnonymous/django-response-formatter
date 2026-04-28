@@ -5,7 +5,7 @@ Usage:
     Add to your DRF settings::
 
         REST_FRAMEWORK = {
-            "EXCEPTION_HANDLER": "django_response_formatter.exceptions.format_exception_handler",
+            "EXCEPTION_HANDLER": "dj_response_formatter.exceptions.format_exception_handler",
         }
 
     This replaces DRF's default exception handler. The custom handler ensures

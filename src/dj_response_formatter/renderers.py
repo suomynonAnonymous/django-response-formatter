@@ -6,13 +6,13 @@ Usage:
 
         REST_FRAMEWORK = {
             "DEFAULT_RENDERER_CLASSES": [
-                "django_response_formatter.renderers.FormattedJSONRenderer",
+                "dj_response_formatter.renderers.FormattedJSONRenderer",
             ],
         }
 
     Or use per-view::
 
-        from django_response_formatter.renderers import FormattedJSONRenderer
+        from dj_response_formatter.renderers import FormattedJSONRenderer
 
         class MyView(APIView):
             renderer_classes = [FormattedJSONRenderer]

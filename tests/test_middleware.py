@@ -5,7 +5,7 @@ import json
 import pytest
 from django.test import RequestFactory
 
-from django_response_formatter.middleware import ResponseFormatterMiddleware
+from dj_response_formatter.middleware import ResponseFormatterMiddleware
 
 
 @pytest.fixture

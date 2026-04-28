@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dj-response-formatter"
-version = "0.1.0"
+version = "0.1.1"
 description = "Standardize all Django REST Framework API responses into a consistent, predictable format"
 readme = "README.md"
 license = {text = "MIT"}
@@ -29,6 +29,7 @@ classifiers = [
     "Framework :: Django :: 4.2",
     "Framework :: Django :: 5.0",
     "Framework :: Django :: 5.1",
+    "Framework :: Django :: 6.0",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -64,7 +65,7 @@ dev = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/django_response_formatter"]
+packages = ["src/dj_response_formatter"]
 
 [tool.ruff]
 line-length = 120
@@ -74,7 +75,7 @@ target-version = "py39"
 select = ["E", "F", "I", "N", "W", "UP"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["django_response_formatter"]
+known-first-party = ["dj_response_formatter"]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.settings"
@@ -88,7 +89,7 @@ warn_unused_configs = true
 ignore_missing_imports = true
 
 [tool.coverage.run]
-source = ["django_response_formatter"]
+source = ["dj_response_formatter"]
 omit = ["tests/*"]
 
 [tool.coverage.report]

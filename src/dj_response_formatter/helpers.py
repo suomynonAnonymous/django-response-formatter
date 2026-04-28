@@ -8,7 +8,7 @@ Usage::
 
     from rest_framework.response import Response
     from rest_framework.views import APIView
-    from django_response_formatter.helpers import success_response, error_response
+    from dj_response_formatter.helpers import success_response, error_response
 
     class UserView(APIView):
         def get(self, request, pk):

@@ -27,7 +27,7 @@ pip install dj-response-formatter
 ```python
 INSTALLED_APPS = [
     # ...
-    "django_response_formatter",
+    "dj_response_formatter",
 ]
 ```
 
@@ -36,9 +36,9 @@ INSTALLED_APPS = [
 ```python
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
-        "django_response_formatter.renderers.FormattedJSONRenderer",
+        "dj_response_formatter.renderers.FormattedJSONRenderer",
     ],
-    "EXCEPTION_HANDLER": "django_response_formatter.exceptions.format_exception_handler",
+    "EXCEPTION_HANDLER": "dj_response_formatter.exceptions.format_exception_handler",
 }
 ```
 
@@ -47,7 +47,7 @@ REST_FRAMEWORK = {
 ```python
 MIDDLEWARE = [
     # ... other middleware ...
-    "django_response_formatter.middleware.ResponseFormatterMiddleware",
+    "dj_response_formatter.middleware.ResponseFormatterMiddleware",
 ]
 ```
 
@@ -138,7 +138,7 @@ DRF pagination metadata is automatically extracted:
 Use the helper functions for explicit control over response messages:
 
 ```python
-from django_response_formatter.helpers import success_response, error_response, raw_response
+from dj_response_formatter.helpers import success_response, error_response, raw_response
 
 class UserView(APIView):
     def get(self, request, pk):

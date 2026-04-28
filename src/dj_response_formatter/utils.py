@@ -1,5 +1,5 @@
 """
-Utility functions for django_response_formatter.
+Utility functions for dj_response_formatter.
 
 Provides helper functions for building standardized response envelopes
 and reading user configuration from Django settings.

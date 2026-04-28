@@ -16,14 +16,14 @@ Every response — success or error — follows this structure:
     }
 
 Quick Start:
-    1. Add 'django_response_formatter' to INSTALLED_APPS
+    1. Add 'dj_response_formatter' to INSTALLED_APPS
     2. Set the renderer in REST_FRAMEWORK settings
     3. Optionally add the middleware for non-DRF exception handling
 
 See README.md for full documentation.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 from .exceptions import format_exception_handler
 from .renderers import FormattedJSONRenderer
@@ -35,4 +35,4 @@ __all__ = [
 ]
 
 # Default app config for Django
-default_app_config = "django_response_formatter.apps.DjangoResponseFormatterConfig"
+default_app_config = "dj_response_formatter.apps.DjangoResponseFormatterConfig"
