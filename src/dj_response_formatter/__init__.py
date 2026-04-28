@@ -33,6 +33,3 @@ __all__ = [
     "FormattedJSONRenderer",
     "format_exception_handler",
 ]
-
-# Default app config for Django
-default_app_config = "dj_response_formatter.apps.DjangoResponseFormatterConfig"
