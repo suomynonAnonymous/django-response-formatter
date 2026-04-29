@@ -48,6 +48,12 @@ def format_exception_handler(exc: Exception, context: dict) -> Optional[Response
     if response is not None:
         # DRF handled it — normalize the error data structure
         response.data = _normalize_error_data(response.data, exc)
+
+        # Include Retry-After for throttled responses
+        if hasattr(exc, "wait") and exc.wait:
+            response["Retry-After"] = str(int(exc.wait))
+            response.data["_retry_after"] = exc.wait
+
         return response
 
     # DRF did not handle the exception (it's not an APIException).

@@ -167,3 +167,128 @@ class TestHelperResponses:
         assert data["status"] == "error"
         assert data["message"] == "Validation failed."
         assert data["errors"]["email"] == ["Invalid email."]
+
+
+class TestThrottleRetryAfter:
+    """Test that throttled responses include retry_after metadata."""
+
+    def test_throttle_includes_retry_after(self, client):
+        response = client.get("/api/throttled/")
+        data = response.json()
+
+        assert response.status_code == 429
+        assert data["status"] == "error"
+        # retry_after should be in metadata
+        assert data["metadata"]["retry_after"] == 30
+        # Retry-After header should be set
+        assert response["Retry-After"] == "30"
+
+
+class TestCustomStatusCodeMessages:
+    """Test configurable status code messages."""
+
+    def test_custom_status_code_messages(self, client, settings):
+        settings.RESPONSE_FORMATTER = {
+            "STATUS_CODE_MESSAGES": {
+                400: "Oops, bad request!",
+                404: "Nothing here, sorry.",
+            }
+        }
+        response = client.post("/api/validation-error/", data={}, format="json")
+        data = response.json()
+
+        assert response.status_code == 400
+        assert data["message"] == "Oops, bad request!"
+
+    def test_custom_messages_dont_override_detail(self, client, settings):
+        """If DRF provides a 'detail' message, it should still be used."""
+        settings.RESPONSE_FORMATTER = {
+            "STATUS_CODE_MESSAGES": {
+                404: "Custom not found.",
+            }
+        }
+        response = client.get("/api/not-found/")
+        data = response.json()
+
+        # DRF's NotFound has a 'detail' which takes priority
+        assert response.status_code == 404
+        assert "not found" in data["message"].lower()
+
+
+class TestRendererEdgeCases:
+    """Test edge cases for renderer coverage."""
+
+    def test_no_response_object(self):
+        """When there's no response object, data is rendered as-is."""
+        import json
+
+        from dj_response_formatter.renderers import FormattedJSONRenderer
+
+        renderer = FormattedJSONRenderer()
+        result = renderer.render({"key": "value"}, renderer_context={})
+        assert json.loads(result) == {"key": "value"}
+
+    def test_list_error_data_direct(self):
+        """List error data should be wrapped in non_field_errors."""
+        import json
+        from unittest.mock import MagicMock
+
+        from dj_response_formatter.renderers import FormattedJSONRenderer
+
+        renderer = FormattedJSONRenderer()
+        response = MagicMock()
+        response.status_code = 400
+        response._skip_formatting = False
+        del response._formatter_message  # getattr returns default
+
+        result = renderer.render(
+            ["Error 1", "Error 2"],
+            renderer_context={"response": response},
+        )
+        parsed = json.loads(result)
+        assert parsed["status"] == "error"
+        assert parsed["errors"]["non_field_errors"] == ["Error 1", "Error 2"]
+
+    def test_string_error_data_direct(self):
+        """String error data should become the message."""
+        import json
+        from unittest.mock import MagicMock
+
+        from dj_response_formatter.renderers import FormattedJSONRenderer
+
+        renderer = FormattedJSONRenderer()
+        response = MagicMock()
+        response.status_code = 400
+        response._skip_formatting = False
+        del response._formatter_message
+
+        result = renderer.render(
+            "Something went wrong",
+            renderer_context={"response": response},
+        )
+        parsed = json.loads(result)
+        assert parsed["status"] == "error"
+        assert parsed["message"] == "Something went wrong"
+        assert parsed["errors"] is None
+
+    def test_detail_with_extra_fields(self):
+        """Dict with 'detail' and other fields should separate them."""
+        import json
+        from unittest.mock import MagicMock
+
+        from dj_response_formatter.renderers import FormattedJSONRenderer
+
+        renderer = FormattedJSONRenderer()
+        response = MagicMock()
+        response.status_code = 403
+        response._skip_formatting = False
+        del response._formatter_message
+
+        result = renderer.render(
+            {"detail": "Forbidden", "code": "permission_denied"},
+            renderer_context={"response": response},
+        )
+        parsed = json.loads(result)
+        assert parsed["status"] == "error"
+        assert parsed["message"] == "Forbidden"
+        assert parsed["errors"] == {"code": "permission_denied"}

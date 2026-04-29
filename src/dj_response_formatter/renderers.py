@@ -155,8 +155,14 @@ class FormattedJSONRenderer(JSONRenderer):
         # Try to extract a meaningful message from the error data
         message = getattr(response, "_formatter_message", None)
         errors = data
+        metadata = None
 
         if isinstance(data, dict):
+            # Extract _retry_after metadata injected by exception handler
+            retry_after = data.pop("_retry_after", None)
+            if retry_after is not None:
+                metadata = {"retry_after": retry_after}
+
             # DRF often puts the main message in "detail"
             if "detail" in data:
                 message = message or str(data["detail"])
@@ -182,6 +188,7 @@ class FormattedJSONRenderer(JSONRenderer):
             errors=errors,
             message=message,
             status_code=status_code,
+            metadata=metadata,
         )
 
     @staticmethod
@@ -189,13 +196,16 @@ class FormattedJSONRenderer(JSONRenderer):
         """
         Return a human-readable error message based on the HTTP status code.
 
+        Uses built-in defaults, merged with any custom overrides from the
+        ``STATUS_CODE_MESSAGES`` config.
+
         Args:
             status_code: The HTTP status code.
 
         Returns:
             str: A descriptive error message.
         """
-        messages = {
+        builtin_messages = {
             400: "Bad request.",
             401: "Authentication credentials were not provided or are invalid.",
             403: "You do not have permission to perform this action.",
@@ -210,4 +220,7 @@ class FormattedJSONRenderer(JSONRenderer):
             502: "Bad gateway.",
             503: "Service temporarily unavailable.",
         }
+        config = get_config()
+        custom = config.get("STATUS_CODE_MESSAGES", {})
+        messages = {**builtin_messages, **custom}
         return messages.get(status_code, f"An error occurred (HTTP {status_code}).")

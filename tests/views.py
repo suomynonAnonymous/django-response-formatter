@@ -99,3 +99,5 @@ class HelperErrorView(APIView):
             message="Validation failed.",
             status_code=400,
         )
+
+

@@ -77,3 +77,44 @@ class TestMiddleware:
 
         assert response.status_code == 500
         assert json.loads(response.content)["status"] == "error"
+
+    def test_configurable_api_prefix(self, rf, settings):
+        """Custom API prefix should trigger JSON formatting."""
+        settings.RESPONSE_FORMATTER = {"API_PREFIXES": ["/v1/", "/v2/"]}
+
+        def view(request):
+            raise ValueError("oops")
+
+        middleware = self._make_middleware(view)
+
+        # /v1/ prefix should work
+        request = rf.get("/v1/users/")
+        response = middleware(request)
+        assert response.status_code == 500
+        assert json.loads(response.content)["status"] == "error"
+
+        # /v2/ prefix should work
+        request = rf.get("/v2/items/")
+        response = middleware(request)
+        assert response.status_code == 500
+        assert json.loads(response.content)["status"] == "error"
+
+        # /api/ should NOT work (not in custom list)
+        request = rf.get("/api/test/")
+        with pytest.raises(ValueError, match="oops"):
+            middleware(request)
+
+    def test_multiple_api_prefixes(self, rf, settings):
+        """Multiple prefixes should all work."""
+        settings.RESPONSE_FORMATTER = {"API_PREFIXES": ["/api/", "/internal/", "/graphql/"]}
+
+        def view(request):
+            raise ValueError("oops")
+
+        middleware = self._make_middleware(view)
+
+        for prefix in ["/api/test/", "/internal/health/", "/graphql/"]:
+            request = rf.get(prefix)
+            response = middleware(request)
+            assert response.status_code == 500
+            assert json.loads(response.content)["status"] == "error"

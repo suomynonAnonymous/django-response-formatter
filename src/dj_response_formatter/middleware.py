@@ -26,7 +26,7 @@ from typing import Callable
 
 from django.http import HttpRequest, HttpResponse, JsonResponse
 
-from .utils import build_error_envelope
+from .utils import build_error_envelope, get_config
 
 logger = logging.getLogger("dj_response_formatter")
 
@@ -109,8 +109,9 @@ class ResponseFormatterMiddleware:
         if "application/json" in content_type:
             return True
 
-        # Common convention: /api/ prefix indicates an API endpoint
-        if request.path.startswith("/api/"):
+        # Check configurable API prefixes
+        config = get_config()
+        if any(request.path.startswith(p) for p in config["API_PREFIXES"]):
             return True
 
         return False

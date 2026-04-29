@@ -31,6 +31,10 @@ DEFAULT_CONFIG = {
     "EXTRACT_PAGINATION": True,
     # Pagination field names to look for in the response data
     "PAGINATION_FIELDS": ["count", "next", "previous", "page_size", "total_pages"],
+    # URL prefixes that indicate API endpoints (for middleware JSON detection)
+    "API_PREFIXES": ["/api/"],
+    # Custom status code → message overrides (merged on top of built-in defaults)
+    "STATUS_CODE_MESSAGES": {},
 }
 
 
